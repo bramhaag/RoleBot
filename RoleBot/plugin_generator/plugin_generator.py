@@ -32,12 +32,21 @@ def num1():
     first = 1
     for anemoji, arole in zip(emojis, roles):
         if first == 1:
-            add_roles += f"""            if res.reaction.emoji == {anemoji}:\n                await self.bot.add_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))\n"""
+            add_roles += f"""
+            if res.reaction.emoji == {anemoji}:
+                if discord.utils.get(msg.server.roles, name='{arole}') in res.user.roles:
+                    await self.bot.remove_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))
+                else:
+                    await self.bot.add_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))"""
             first = 0
         else:
-            add_roles += f"""            elif res.reaction.emoji == {anemoji}:\n                await self.bot.add_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))\n"""
+            add_roles += f"""
+            elif res.reaction.emoji == {anemoji}:
+                if discord.utils.get(msg.server.roles, name='{arole}') in res.user.roles:
+                    await self.bot.remove_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))     
+                else:        
+                    await self.bot.add_roles(res.user, discord.utils.get(msg.server.roles, name='{arole}'))"""
 
-    
     normalliststr = "["
     for i in range(emojis.__len__() - 1):
         num = i
